@@ -1,35 +1,35 @@
+# Verify notes in onenote as well.
+name: Integration # this is where we specify what the yaml file is going to denote.
 
-name: Integration
-
-on:
+on: # on - specifies on which event should these jobs be triggered.
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
 jobs:
-  build:
+  build: # build job, you can multiple jobs underneath this jobs key.
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest # all these jobs are not going to run on our local machine, all these jobs are going to run on the github servers/runner. Here we are specifying which particular machine should GitHub use in their server.
 
     strategy:
       matrix:
         node-version: [18.x, 20.x, 22.x]
 
-    steps:
-    - uses: actions/checkout@v4
+    steps: # These are the steps that github has to do to completely execute this particular job.
+    - uses: actions/checkout@v4 # tells github to checkout to the current branch. By default, it is going to be on master/main branch.
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v3 # this command is telling github to setup the node environment before doing anything else with the project. This action then handles installing Node.js and setting up its environment for later steps.
       with:
-        node-version: ${{ matrix.node-version }}
+        node-version: ${{ matrix.node-version }} # this is where strategy blocks comes into picture. This is going to run the job with all the node versions specified in the matrix block of strategy with child as node-version.
         cache: 'npm'
     - name: "Installing Dependencies"
-      run: npm i
+      run: npm i # telling github to run this particular command.
 
     - name: "Build command"
       run: npm run build
 
-  unit-tests:
+  unit-tests: # unit-tests job, you can multiple jobs underneath this jobs key.
 
     runs-on: ubuntu-latest
 
